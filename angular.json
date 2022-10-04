@@ -68,7 +68,7 @@
       "projectType": "application",
       "root": "apps/sched",
       "sourceRoot": "apps/sched/src",
-      "prefix": "mfe-app",
+      "prefix": "sched",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

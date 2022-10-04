@@ -1,0 +1,17 @@
+@import '../../../colors.scss';
+
+$standardGap: 0.5rem;
+$standardRadius: 1rem;
+
+:host {
+  padding: $standardGap;
+  margin: $standardGap;
+  border-radius: $standardRadius;
+  border-width: 2px;
+  border-style: solid;
+  border-color: $mainBorderColor;
+  background-color: $mainBgColor;
+  flex-direction: column;
+  display: flex;
+  gap: $standardGap;
+}

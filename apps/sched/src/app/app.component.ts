@@ -1,13 +1,21 @@
 import { Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Message } from '@mfe-app/api-interfaces';
 
 @Component({
-  selector: 'mfe-app-root',
+  selector: 'sched-application-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
-  constructor(private http: HttpClient) {}
+  onActivate(component: any) {
+    console.log('onActivate');
+  }
+  onDeactivate(component: any) {
+    console.log('onDeactivate');
+  }
+  onDeattach(component: any) {
+    console.log('onDeattach', component);
+  }
+  onAttach(component: any) {
+    console.log('onAttach', component);
+  }
 }

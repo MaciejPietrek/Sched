@@ -1,9 +1,11 @@
-<div style="text-align: center">
-  <h1>Welcome to sched!</h1>
-  <img
-    width="450"
-    src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-    alt="Nx - Smart, Extensible Build Framework"
-  />
-</div>
-<div>Message: {{ hello$ | async | json }}</div>
+<button type="button" routerLink="/main">main</button>
+
+<button type="button" routerLink="/">host</button>
+
+<button type="button" routerLink="/signIn">signIn</button>
+
+<button type="button" routerLink="/signUp">signUp</button>
+
+<button type="button" routerLink="/signOut">signOut</button>
+
+<router-outlet></router-outlet>
