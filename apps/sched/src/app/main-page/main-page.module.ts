@@ -16,4 +16,4 @@ const routes: Routes = [
   exports: [MainPageComponent],
   bootstrap: [MainPageComponent],
 })
-export class MainPageModuleModule {}
+export class MainPageModule {}

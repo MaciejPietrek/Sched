@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ProgressElementModule } from './progress-element/progress-element.module';
+import { ButtonModule } from 'primeng/button';
+import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app.routing.module';
 import { AuthPageModule } from './auth-page/auth-page.module';
 import { GeneralLayoutModule } from './components/general-layout/general-layout.module';
+import { ProgressElementModule } from './progress-element/progress-element.module';
 import { JwtInterceptorService } from './services/jwt-interceptor/jwt-interceptor.service';
+import { MenubarModule } from 'primeng/menubar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +20,8 @@ import { JwtInterceptorService } from './services/jwt-interceptor/jwt-intercepto
     AppRoutingModule,
     AuthPageModule,
     GeneralLayoutModule,
+    ButtonModule,
+    MenubarModule,
   ],
   providers: [
     {
