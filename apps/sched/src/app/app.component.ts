@@ -1,3 +1,4 @@
+import { TestService } from './services/test/test.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -6,6 +7,7 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  constructor(private test: TestService) {}
   onActivate(component: any) {
     console.log('onActivate');
   }
@@ -17,5 +19,9 @@ export class AppComponent {
   }
   onAttach(component: any) {
     console.log('onAttach', component);
+  }
+
+  checkConnection() {
+    this.test.checkConnection().subscribe();
   }
 }

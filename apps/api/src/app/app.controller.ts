@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 
-import { Message } from '@mfe-app/api-interfaces';
+import { IResponse, Message } from '@mfe-app/api-interfaces';
 
 import { AppService } from './app.service';
 
@@ -9,7 +9,15 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get('hello')
-  getData(): Message {
-    return this.appService.getData();
+  sayHello(): string {
+    return 'hello';
+  }
+
+  @Get('checkConnection')
+  getData(): IResponse {
+    return {
+      data: { message: 'everything is okay', timestamp: Number(new Date()) },
+      status: 'OK',
+    };
   }
 }
