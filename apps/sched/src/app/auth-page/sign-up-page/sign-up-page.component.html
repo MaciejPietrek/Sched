@@ -1,1 +1,34 @@
-<p>sign-up-page works!</p>
+<div class="form-wrapper">
+  <form>
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon"><i class="pi pi-user"></i></span>
+      <input type="text" pInputText placeholder="Username" />
+    </div>
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon"><i class="pi pi-send"></i></span>
+      <input type="email" pInputText placeholder="Email" />
+    </div>
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon"><i class="pi pi-key"></i></span>
+      <input type="password" pInputText placeholder="Password" />
+      <button type="button" pButton pRipple icon="pi pi-sign-in"></button>
+    </div>
+  </form>
+
+  <button
+    pButton
+    type="button"
+    label="Sign in"
+    class="p-button-link white-bg"
+    routerLink="/signIn"
+  ></button>
+  <button
+    pButton
+    type="button"
+    label="Go back"
+    class="p-button-link white-bg"
+    routerLink="/welcome"
+  ></button>
+</div>

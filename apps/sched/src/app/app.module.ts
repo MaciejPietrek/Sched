@@ -9,7 +9,6 @@ import { AuthPageModule } from './auth-page/auth-page.module';
 import { GeneralLayoutModule } from './components/general-layout/general-layout.module';
 import { ProgressElementModule } from './progress-element/progress-element.module';
 import { JwtInterceptorService } from './services/jwt-interceptor/jwt-interceptor.service';
-import { MenubarModule } from 'primeng/menubar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,7 +20,6 @@ import { MenubarModule } from 'primeng/menubar';
     AuthPageModule,
     GeneralLayoutModule,
     ButtonModule,
-    MenubarModule,
   ],
   providers: [
     {

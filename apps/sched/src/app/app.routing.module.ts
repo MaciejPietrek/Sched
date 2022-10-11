@@ -31,7 +31,11 @@ const routes: Routes = [
   },
   {
     path: 'welcome',
-    component: WelcomePageComponent,
+    loadChildren: () =>
+      import('./welcome-page/welcome-page.module').then(
+        (m) => m.WelcomePageModule
+      ),
+    canActivate: [AnonimGuard],
   },
   {
     path: '**',
