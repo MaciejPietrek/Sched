@@ -1,1 +1,9 @@
 <p-menubar [model]="items"></p-menubar>
+
+<ag-grid-angular
+  class="ag-theme-alpine"
+  [gridOptions]="pageGridDefinition"
+  [rowSelection]="'multiple'"
+  [rowData]="rowData"
+  [animateRows]="true"
+></ag-grid-angular>

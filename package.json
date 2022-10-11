@@ -47,6 +47,8 @@
     "@nestjs/passport": "^8.2.1",
     "@nestjs/platform-express": "^8.0.0",
     "@nrwl/angular": "13.8.0",
+    "ag-grid-angular": "^28.2.0",
+    "ag-grid-community": "^28.2.0",
     "font-awesome": "^4.7.0",
     "mongoose": "^6.2.1",
     "passport": "^0.5.2",

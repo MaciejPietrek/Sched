@@ -1,7 +1,14 @@
+import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cell-renderer.component';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { paths } from '../../utils/paths';
+import {
+  CellClickedEvent,
+  ColDef,
+  GridOptions,
+  GridReadyEvent,
+} from 'ag-grid-community';
 
 @Component({
   selector: 'sched-main-page',
@@ -18,5 +25,17 @@ export class MainPageComponent implements OnInit {
     },
   ];
 
+  pageGridCols: ColDef[] = [
+    { field: 'change', headerName: 'Latest changes' },
+    {
+      field: 'action',
+      headerName: 'Action',
+      cellRenderer: BtnCellRendererComponent,
+    },
+  ];
+  pageGridDefinition: GridOptions = {
+    columnDefs: this.pageGridCols,
+  };
+  rowData = [{ change: 'added login info', action: 'move' }];
   ngOnInit(): void {}
 }
