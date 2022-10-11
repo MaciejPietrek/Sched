@@ -1,3 +1,4 @@
+import { DevModule } from './dev/dev.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -20,6 +21,7 @@ import { JwtInterceptorService } from './services/jwt-interceptor/jwt-intercepto
     AuthPageModule,
     GeneralLayoutModule,
     ButtonModule,
+    DevModule,
   ],
   providers: [
     {

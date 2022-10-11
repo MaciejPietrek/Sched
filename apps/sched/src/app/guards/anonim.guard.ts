@@ -27,7 +27,7 @@ export class AnonimGuard implements CanActivate {
     state: RouterStateSnapshot
   ): ActivationResult {
     if (this.session.isInitialized())
-      return this.router.createUrlTree([paths.welcomePage]);
+      return this.router.createUrlTree([paths.main]);
     return true;
   }
 }

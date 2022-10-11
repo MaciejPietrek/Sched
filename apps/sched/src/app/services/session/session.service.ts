@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-
-interface JwtSession {
-  login: string;
-  exp: number;
-}
-type Jwt = string;
+import { PStorage } from '../../utils/storage';
+import { Jwt, JwtSession } from './session.interface';
+import { jwtS, sessionInitialitedS, sessionS } from './session.storage';
 
 @Injectable({
   providedIn: 'root',
@@ -12,27 +9,30 @@ type Jwt = string;
 export class SessionService {
   constructor() {}
 
-  private session?: JwtSession;
-  private jwt?: Jwt;
-  private initialized: boolean = false;
-
   public init(jwt: Jwt) {
-    const jwtString = jwt;
-    const dataString = jwtString.split('.')[1];
-    const dataObj = JSON.parse(dataString);
-    this.session = dataObj;
-    this.jwt = jwt;
-    this.initialized = true;
+    try {
+      const jwtString = jwt;
+      const dataString = jwtString.split('.')[1];
+      const decoded = atob(dataString);
+      const dataObj = JSON.parse(decoded);
+
+      jwtS.set(jwt);
+      sessionS.set(dataObj);
+      sessionInitialitedS.set(true);
+    } catch (error) {
+      console.error(new Error(`Invalid jwt token\n'${jwt}'`));
+      return;
+    }
   }
 
   public clear() {
-    this.session = undefined;
-    this.jwt = undefined;
+    sessionS.clear();
+    sessionInitialitedS.clear();
   }
 
-  public getSession = (): JwtSession => this.session as JwtSession;
+  public getSession = (): JwtSession => sessionS.get() as JwtSession;
 
-  public getJwt = (): Jwt => this.jwt as Jwt;
+  public getJwt = (): Jwt => jwtS.get() as Jwt;
 
-  public isInitialized = () => this.initialized;
+  public isInitialized = () => sessionInitialitedS.get() ?? false;
 }
