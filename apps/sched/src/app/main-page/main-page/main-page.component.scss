@@ -3,9 +3,17 @@
   width: 100vw;
 
   display: grid;
-  grid-template-rows: auto 1fr;
+  grid-template-columns: auto 1fr;
 }
 
 ag-grid-angular {
   margin: 1em;
+}
+
+:host::ng-deep {
+  .p-megamenu.p-megamenu-vertical {
+    height: 100% !important;
+    width: unset !important;
+    border-radius: 0px !important;
+  }
 }

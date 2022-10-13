@@ -4,10 +4,16 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { Routes, RouterModule } from '@angular/router';
 import { MenubarModule } from 'primeng/menubar';
 import { AgGridModule } from 'ag-grid-angular';
+import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { MegaMenuModule } from 'primeng/megamenu';
 
 const routes: Routes = [
   {
     path: '',
+    component: MainPageComponent,
+  },
+  {
+    path: 'check',
     component: MainPageComponent,
   },
 ];
@@ -17,6 +23,8 @@ const routes: Routes = [
   imports: [
     CommonModule,
     MenubarModule,
+    MegaMenuModule,
+    BreadcrumbModule,
     AgGridModule,
     RouterModule.forChild(routes),
   ],

@@ -1,14 +1,9 @@
-import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cell-renderer.component';
-import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
+import { ColDef, GridOptions } from 'ag-grid-community';
+import { MegaMenuItem } from 'primeng/api';
 import { paths } from '../../utils/paths';
-import {
-  CellClickedEvent,
-  ColDef,
-  GridOptions,
-  GridReadyEvent,
-} from 'ag-grid-community';
+import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cell-renderer.component';
 
 @Component({
   selector: 'sched-main-page',
@@ -18,7 +13,7 @@ import {
 export class MainPageComponent implements OnInit {
   constructor(private router: Router) {}
 
-  items: MenuItem[] = [
+  items: MegaMenuItem[] = [
     {
       icon: 'pi pi-fw pi-sign-out',
       command: () => this.router.navigateByUrl(paths.signOut),

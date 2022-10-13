@@ -14,6 +14,13 @@ form {
   display: contents;
 }
 
+.error-message {
+  color: orangered;
+  background-color: white;
+  padding: 0.25em;
+  border-radius: 0.25em;
+}
+
 .form-wrapper {
   gap: 0.5em;
   display: grid;
