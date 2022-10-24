@@ -4,6 +4,7 @@ import { environment } from '../environments/environment.prod';
 
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
+import { ViewSourceController } from './view-souce/view-source.controller';
 
 const main = environment.mongoDB.main;
 const datasources = environment.mongoDB.datasources;
@@ -12,7 +13,7 @@ const dsMongoDbConnectionString = `mongodb+srv://${datasources.username}:${datas
 
 @Module({
   imports: [MongooseModule.forRoot(mongoDbConnectionString), AuthModule],
-  controllers: [AppController],
+  controllers: [AppController, ViewSourceController],
   providers: [],
 })
 export class AppModule {}

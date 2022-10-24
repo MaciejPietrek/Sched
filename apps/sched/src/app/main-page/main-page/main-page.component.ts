@@ -12,7 +12,7 @@ import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cel
   styleUrls: ['./main-page.component.scss'],
 })
 export class MainPageComponent implements OnInit {
-  constructor(private router: Router, private session: SessionService) {
+  constructor(private session: SessionService) {
     this.items = [
       {
         icon: 'pi pi-fw pi-user',
@@ -21,7 +21,7 @@ export class MainPageComponent implements OnInit {
       },
       {
         icon: 'pi pi-fw pi-sign-out',
-        command: () => this.router.navigateByUrl(paths.signOut),
+        routerLink: `/${paths.signOut}`,
       },
     ];
   }

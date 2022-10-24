@@ -22,6 +22,14 @@ const routes: Routes = [
     canActivate: [SignInGuard],
   },
   {
+    path: 'sources',
+    loadChildren: () =>
+      import('./view-source/view-source.module').then(
+        (m) => m.ViewSourceModule
+      ),
+    canActivate: [SignInGuard],
+  },
+  {
     path: 'signIn',
     component: SignInPageComponent,
     canActivate: [AnonimGuard],

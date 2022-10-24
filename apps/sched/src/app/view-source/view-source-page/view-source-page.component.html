@@ -1,0 +1,9 @@
+<p-megaMenu [model]="items" orientation="vertical"></p-megaMenu>
+
+<ag-grid-angular
+  class="ag-theme-alpine"
+  [gridOptions]="pageGridDefinition"
+  [rowSelection]="'multiple'"
+  [rowData]="rowData"
+  [animateRows]="true"
+></ag-grid-angular>
