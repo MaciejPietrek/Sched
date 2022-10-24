@@ -4,4 +4,5 @@ export const paths = {
   signUp: 'signUp',
   signOut: 'signOut',
   welcomePage: 'welcome',
+  userPage: 'user',
 };

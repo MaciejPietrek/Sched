@@ -7,6 +7,7 @@ import { Injectable } from '@angular/core';
 import { handle401 } from '../http-handlers/http-handler';
 import { SignInData, SignOutData, SignUpData } from './auth-page.interface';
 import { tap } from 'rxjs';
+import { signInGuardReturnURL } from '../utils/storages';
 
 @Injectable({
   providedIn: 'root',
@@ -27,7 +28,9 @@ export class AuthPageService {
       .pipe(
         tap((response: any) => {
           this.session.init(response.token);
-          this.router.navigateByUrl(paths.main);
+          if (signInGuardReturnURL.has())
+            this.router.navigateByUrl(signInGuardReturnURL.pop()!);
+          else this.router.navigateByUrl(paths.main);
         })
       );
   }

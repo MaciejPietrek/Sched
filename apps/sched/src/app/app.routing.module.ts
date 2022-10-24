@@ -1,3 +1,4 @@
+import { SignInGuard } from './guards/sign-in.guard';
 import { WelcomePageComponent } from './welcome-page/welcome-page/welcome-page.component';
 import { SignUpPageComponent } from './auth-page/sign-up-page/sign-up-page.component';
 import { SignInPageComponent } from './auth-page/sign-in-page/sign-in-page.component';
@@ -12,7 +13,13 @@ const routes: Routes = [
     path: 'main',
     loadChildren: () =>
       import('./main-page/main-page.module').then((m) => m.MainPageModule),
-    canActivate: [SimpleGuard],
+    canActivate: [SignInGuard],
+  },
+  {
+    path: 'user',
+    loadChildren: () =>
+      import('./user-page/user-page.module').then((m) => m.UserPageModule),
+    canActivate: [SignInGuard],
   },
   {
     path: 'signIn',

@@ -1,4 +1,4 @@
-export type PStorageType = 'local' | 'session';
+export type PStorageType = 'local' | 'session' | 'runtime';
 
 const _Serializators = {
   JSON: JSON.stringify,
@@ -17,6 +17,7 @@ const _Deserializators = {
 export class PStorage<T> {
   static Deserializators = _Deserializators;
   static Serializators = _Serializators;
+  private static storage: any = {};
   constructor(
     type: PStorageType,
     key: string,
@@ -24,6 +25,12 @@ export class PStorage<T> {
     deserializator: (value: string) => T | null = PStorage.Deserializators.JSON
   ) {
     switch (type) {
+      case 'runtime':
+        if (!(key in PStorage.storage)) PStorage.storage[key] = null;
+        this.get = () => PStorage.storage[key];
+        this.set = (value) => (PStorage.storage[key] = value);
+        this.clear = () => (PStorage.storage[key] = null);
+        break;
       case 'local':
         this.get = () => deserializator(localStorage.getItem(key) as any);
         this.set = (value) => localStorage.setItem(key, serializator(value));

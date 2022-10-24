@@ -1,3 +1,4 @@
+import { SessionService } from './../../services/session/session.service';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ColDef, GridOptions } from 'ag-grid-community';
@@ -11,14 +12,21 @@ import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cel
   styleUrls: ['./main-page.component.scss'],
 })
 export class MainPageComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(private router: Router, private session: SessionService) {
+    this.items = [
+      {
+        icon: 'pi pi-fw pi-user',
+        label: this.session.getSession().username,
+        routerLink: `/${paths.userPage}`,
+      },
+      {
+        icon: 'pi pi-fw pi-sign-out',
+        command: () => this.router.navigateByUrl(paths.signOut),
+      },
+    ];
+  }
 
-  items: MegaMenuItem[] = [
-    {
-      icon: 'pi pi-fw pi-sign-out',
-      command: () => this.router.navigateByUrl(paths.signOut),
-    },
-  ];
+  items: MegaMenuItem[] = [];
 
   pageGridCols: ColDef[] = [
     { field: 'change', headerName: 'Latest changes' },
