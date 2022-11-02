@@ -15,6 +15,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(user: IUserLogin): Promise<any> {
     Logger.log('LocalStrategy');
+
     if (!user) return unauthorized;
     if (!user.username) return noLogin;
     if (!user.passwordHash) return noPassword;

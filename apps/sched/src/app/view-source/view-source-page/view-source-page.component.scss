@@ -3,11 +3,11 @@
   width: 100vw;
 
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr 1fr;
 }
 
-ag-grid-angular {
-  margin: 1em;
+ag-grid-angular,
+ngx-monaco-editor {
 }
 
 :host::ng-deep {

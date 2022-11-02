@@ -16,7 +16,7 @@ import { IViewSource } from '../schemes/view-source.schema';
 @Controller('viewSource')
 export class ViewSourceController {
   constructor(
-    @InjectModel('Datasource') private readonly viewSource: Model<IViewSource>,
+    @InjectModel('ViewSource') private readonly viewSource: Model<IViewSource>,
     @InjectConnection() private connection: Connection
   ) {}
 
@@ -33,6 +33,18 @@ export class ViewSourceController {
         description: `Datasource by the name '${param.name}' could not be found`,
       });
     return { data: object };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('getAll')
+  async getAll() {
+    const document = await this.repo.getAll();
+    if (!document)
+      throw new NotFoundException({
+        message: 'Datasource not found',
+        description: `Datasource could not be found`,
+      });
+    return { data: document };
   }
 
   @UseGuards(JwtAuthGuard)

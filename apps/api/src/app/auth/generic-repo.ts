@@ -21,6 +21,10 @@ export class GenericRepo<RepoType> {
     return await this.model.findOne(query).exec();
   }
 
+  async getAll() {
+    return await this.model.find().exec();
+  }
+
   async findOneByFields(entries: [string, any][]) {
     const query = {};
     entries.forEach((entry) => (query[entry[0]] = { $eq: entry[1] }));

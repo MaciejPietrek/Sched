@@ -6,6 +6,8 @@ import { AgGridModule } from 'ag-grid-angular';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { MenubarModule } from 'primeng/menubar';
+import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
+import { ReactiveFormsModule } from '@angular/forms';
 
 const routes: Route[] = [
   {
@@ -20,9 +22,17 @@ const routes: Route[] = [
     CommonModule,
     MenubarModule,
     MegaMenuModule,
+    MonacoEditorModule,
     BreadcrumbModule,
     AgGridModule,
+    ReactiveFormsModule,
     RouterModule.forChild(routes),
+  ],
+  providers: [
+    {
+      provide: MONACO_PATH,
+      useValue: 'https://unpkg.com/monaco-editor@0.31.1/min/vs',
+    },
   ],
   exports: [ViewSourcePageComponent],
 })

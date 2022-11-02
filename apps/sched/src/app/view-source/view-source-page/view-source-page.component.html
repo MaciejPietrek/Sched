@@ -4,6 +4,16 @@
   class="ag-theme-alpine"
   [gridOptions]="pageGridDefinition"
   [rowSelection]="'multiple'"
-  [rowData]="rowData"
+  [rowData]="$any(sources) | async"
   [animateRows]="true"
+  (rowSelected)="selectedRow = $event.data"
 ></ag-grid-angular>
+
+<form fxFlex [formGroup]="reactiveForm">
+  <ngx-monaco-editor
+    [ngModel]="selectedRow | json"
+    formControlName="code"
+    [options]="defaultMonacoOptions"
+  >
+  </ngx-monaco-editor>
+</form>

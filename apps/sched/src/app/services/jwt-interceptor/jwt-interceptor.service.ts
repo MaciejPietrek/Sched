@@ -16,12 +16,17 @@ export class JwtInterceptorService implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    if (this.session.isInitialized())
-      req.headers.set('Authentification', `Bearer ${this.session.getJwt()}`);
-
     const base = 'http://localhost:3333/revile/';
-    const update = { url: base + req.url };
+    const update = {
+      url: base + req.url,
+      headers: req.headers.set(
+        'Authorization',
+        `Bearer ${this.session.getJwt()}`
+      ),
+    };
 
-    return next.handle(req.clone(update));
+    const newRequest = req.clone(update);
+
+    return next.handle(newRequest);
   }
 }
