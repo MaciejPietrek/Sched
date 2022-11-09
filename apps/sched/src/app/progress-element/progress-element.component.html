@@ -1,1 +1,4 @@
 <ng-content></ng-content>
+<div class="mat-spinner-wrapper" *ngIf="this.progress.toggled | async">
+  <mat-spinner></mat-spinner>
+</div>

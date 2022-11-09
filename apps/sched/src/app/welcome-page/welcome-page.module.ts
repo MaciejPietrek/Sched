@@ -1,3 +1,4 @@
+import { MegaMenuModule } from 'primeng/megamenu';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WelcomePageComponent } from './welcome-page/welcome-page.component';
@@ -13,7 +14,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [WelcomePageComponent],
-  imports: [CommonModule, MenubarModule, RouterModule.forChild(routes)],
+  imports: [CommonModule, MegaMenuModule, RouterModule.forChild(routes)],
   exports: [WelcomePageComponent],
 })
 export class WelcomePageModule {}

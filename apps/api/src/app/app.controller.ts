@@ -36,4 +36,12 @@ export class AppController {
     if (token) return token;
     else throw new UnauthorizedException(undefined, 'Invalid credentials');
   }
+
+  @Post('auth/signUp')
+  async signUp(@Body() userInfo: IUserLogin) {
+    Logger.log('auth/signUp');
+    const token = await this.authService.authorize(userInfo);
+    if (token) return token;
+    else throw new UnauthorizedException(undefined, 'Invalid credentials');
+  }
 }

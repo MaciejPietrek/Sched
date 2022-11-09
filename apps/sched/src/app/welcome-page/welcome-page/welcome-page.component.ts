@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { paths } from '../../utils/paths';
+import { MegaMenuItem } from 'primeng/api';
+import { navigationItem } from '../../utils/navigation-items';
 
 @Component({
   selector: 'sched-welcome-page',
@@ -11,12 +11,7 @@ import { paths } from '../../utils/paths';
 export class WelcomePageComponent implements OnInit {
   constructor(private router: Router) {}
 
-  items: MenuItem[] = [
-    {
-      icon: 'pi pi-fw pi-sign-in',
-      command: () => this.router.navigateByUrl(paths.signIn),
-    },
-  ];
+  items: MegaMenuItem[] = [navigationItem.signIn];
 
   ngOnInit(): void {}
 }

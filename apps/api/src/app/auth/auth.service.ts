@@ -25,6 +25,16 @@ export class AuthService {
     }
   }
 
+  public async signUp(user: IUserLogin) {
+    const userResult = await this.userService.getUser(user);
+
+    if (!userResult) return null;
+    else {
+      const userCopy = copy(userResult);
+      return this.createJwt(userCopy);
+    }
+  }
+
   public extendJwt(token: IJwtToken) {
     const tokenCopy = { ...token };
     delete tokenCopy.exp;

@@ -1,13 +1,11 @@
-import { paths } from './../utils/paths';
-import { Router } from '@angular/router';
-import { SessionService } from './../services/session/session.service';
-import { httpStandardHandler } from './../http-handlers/http-handler';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { handle401 } from '../http-handlers/http-handler';
-import { SignInData, SignOutData, SignUpData } from './auth-page.interface';
-import { tap } from 'rxjs';
+import { Router } from '@angular/router';
+import { EMPTY, tap } from 'rxjs';
 import { signInGuardReturnURL } from '../utils/storages';
+import { SessionService } from './../services/session/session.service';
+import { paths } from './../utils/paths';
+import { SignInData, SignOutData, SignUpData } from './auth-page.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -36,15 +34,23 @@ export class AuthPageService {
   }
 
   signOut(data: SignOutData) {
-    this.http.post('auth/signOut', data).subscribe(console.log);
+    this.http.post('auth/signOut', data).subscribe();
   }
 
   signUp(data: SignUpData) {
-    this.http
+    return EMPTY;
+    return this.http
       .post('auth/signUp', {
         username: data.username,
         passwordHash: data.password,
       })
-      .subscribe(console.log);
+      .pipe(
+        tap((response: any) => {
+          this.session.init(response.token);
+          if (signInGuardReturnURL.has())
+            this.router.navigateByUrl(signInGuardReturnURL.pop()!);
+          else this.router.navigateByUrl(paths.main);
+        })
+      );
   }
 }

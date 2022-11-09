@@ -1,11 +1,10 @@
-import { SignInGuard } from './guards/sign-in.guard';
-import { WelcomePageComponent } from './welcome-page/welcome-page/welcome-page.component';
-import { SignUpPageComponent } from './auth-page/sign-up-page/sign-up-page.component';
-import { SignInPageComponent } from './auth-page/sign-in-page/sign-in-page.component';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
+import { SignInPageComponent } from './auth-page/sign-in-page/sign-in-page.component';
 import { SignOutPageComponent } from './auth-page/sign-out-page/sign-out-page.component';
+import { SignUpPageComponent } from './auth-page/sign-up-page/sign-up-page.component';
 import { AnonimGuard } from './guards/anonim.guard';
+import { SignInGuard } from './guards/sign-in.guard';
 import { SimpleGuard } from './guards/simple.guard';
 
 const routes: Routes = [

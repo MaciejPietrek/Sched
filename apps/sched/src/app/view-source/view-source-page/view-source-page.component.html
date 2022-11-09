@@ -1,17 +1,36 @@
-<p-megaMenu [model]="items" orientation="vertical"></p-megaMenu>
+<p-megaMenu [model]="items" class="bar" orientation="vertical"></p-megaMenu>
 
-<ag-grid-angular
-  class="ag-theme-alpine"
-  [gridOptions]="pageGridDefinition"
-  [rowSelection]="'multiple'"
-  [rowData]="$any(sources) | async"
-  [animateRows]="true"
-  (rowSelected)="selectedRow = $event.data"
-></ag-grid-angular>
+<div class="grid-cell grid">
+  <ag-grid-angular
+    class="ag-theme-alpine"
+    [gridOptions]="pageGridDefinition"
+    [rowSelection]="'multiple'"
+    [rowData]="$any(sources) | async"
+    [animateRows]="true"
+    (selectionChanged)="selectionChanged($event)"
+  ></ag-grid-angular>
+</div>
 
-<form fxFlex [formGroup]="reactiveForm">
+<div class="grid-cell buttons">
+  <button
+    pButton
+    (click)="onSave()"
+    [disabled]="!selectedRow"
+    type="button"
+    label="Save"
+  ></button>
+  <button
+    pButton
+    [disabled]="!selectedRow"
+    type="button"
+    label="Delete"
+  ></button>
+</div>
+
+<form fxFlex [formGroup]="reactiveForm" class="grid-cell monaco">
   <ngx-monaco-editor
     [ngModel]="selectedRow | json"
+    (ngModelChange)="editedRow = $event"
     formControlName="code"
     [options]="defaultMonacoOptions"
   >

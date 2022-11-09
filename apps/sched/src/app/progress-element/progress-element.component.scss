@@ -1,6 +1,11 @@
 :host {
   position: relative;
 }
-:host.show {
-  background-color: #cbd0e9;
+
+.mat-spinner-wrapper {
+  background-color: rgba(255, 0, 0, 0.612);
+  place-items: center;
+  position: absolute;
+  display: grid;
+  inset: 0px;
 }

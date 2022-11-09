@@ -5,6 +5,7 @@ import { ColDef, GridOptions } from 'ag-grid-community';
 import { MegaMenuItem } from 'primeng/api';
 import { paths } from '../../utils/paths';
 import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cell-renderer.component';
+import { navigationItem } from '../../utils/navigation-items';
 
 @Component({
   selector: 'sched-main-page',
@@ -14,15 +15,9 @@ import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cel
 export class MainPageComponent implements OnInit {
   constructor(private session: SessionService) {
     this.items = [
-      {
-        icon: 'pi pi-fw pi-user',
-        label: this.session.getSession().username,
-        routerLink: `/${paths.userPage}`,
-      },
-      {
-        icon: 'pi pi-fw pi-sign-out',
-        routerLink: `/${paths.signOut}`,
-      },
+      navigationItem.user(this.session.getSession().username),
+      navigationItem.sources,
+      navigationItem.signOut,
     ];
   }
 

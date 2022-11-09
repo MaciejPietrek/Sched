@@ -1,8 +1,19 @@
+import { ProgressElementService } from './../../progress-element/progress-element.service';
 import { BehaviorSubject } from 'rxjs';
 import { paths } from './../../utils/paths';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ElementRef,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
 import { AuthPageService } from '../auth-page.service';
-import { handle401 } from '../../http-handlers/http-handler';
+import {
+  handle,
+  handle401,
+  handleProgress,
+} from '../../http-handlers/http-handler';
 
 @Component({
   selector: 'sched-sign-in-page',
@@ -16,6 +27,8 @@ export class SignInPageComponent implements OnInit {
   routerPaths = paths;
   errorMessage = new BehaviorSubject('');
 
+  @ViewChild(ProgressElementService) public progress!: ProgressElementService;
+
   @ViewChild('signInForm') form!: ElementRef<HTMLFormElement>;
 
   signIn() {
@@ -25,9 +38,19 @@ export class SignInPageComponent implements OnInit {
     this.auth
       .signIn(formProps as any)
       .pipe(
-        handle401((response) => this.errorMessage.next(response.error.message))
+        handle401((response) => this.setError(response.error.message)),
+        handle(() => this.setError('Connection error')),
+        handleProgress(this.progress)
       )
       .subscribe();
+  }
+
+  clearError() {
+    this.errorMessage.next('');
+  }
+
+  setError(error: string) {
+    this.errorMessage.next(error);
   }
 
   ngOnInit(): void {}

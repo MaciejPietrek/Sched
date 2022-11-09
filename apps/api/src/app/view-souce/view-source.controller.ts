@@ -141,7 +141,7 @@ export class ViewSourceController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('data/findByIdAndUpdate')
+  @Post('data/findByIdAndUpdate')
   async findByIdAndUpdate(
     @Body() body: { source: IViewSource; ID: string; update: UpdateQuery<any> }
   ) {

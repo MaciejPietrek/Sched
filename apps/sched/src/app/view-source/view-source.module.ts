@@ -1,3 +1,4 @@
+import { ButtonModule } from 'primeng/button';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ViewSourcePageComponent } from './view-source-page/view-source-page.component';
@@ -20,11 +21,12 @@ const routes: Route[] = [
   declarations: [ViewSourcePageComponent],
   imports: [
     CommonModule,
+    ButtonModule,
+    AgGridModule,
     MenubarModule,
     MegaMenuModule,
-    MonacoEditorModule,
     BreadcrumbModule,
-    AgGridModule,
+    MonacoEditorModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
   ],

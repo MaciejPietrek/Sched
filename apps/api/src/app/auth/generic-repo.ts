@@ -22,7 +22,7 @@ export class GenericRepo<RepoType> {
   }
 
   async getAll() {
-    return await this.model.find().exec();
+    return await this.model.find({}).exec();
   }
 
   async findOneByFields(entries: [string, any][]) {

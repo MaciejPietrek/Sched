@@ -1,3 +1,5 @@
+import { paths } from './../../utils/paths';
+import { handle401 } from './../../http-handlers/http-handler';
 import { SessionService } from './../session/session.service';
 import {
   HttpEvent,
@@ -6,11 +8,12 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class JwtInterceptorService implements HttpInterceptor {
-  constructor(private session: SessionService) {}
+  constructor(private session: SessionService, private router: Router) {}
 
   intercept(
     req: HttpRequest<any>,
@@ -27,6 +30,8 @@ export class JwtInterceptorService implements HttpInterceptor {
 
     const newRequest = req.clone(update);
 
-    return next.handle(newRequest);
+    return next
+      .handle(newRequest)
+      .pipe(handle401(() => this.router.navigateByUrl(paths.signOut))) as any;
   }
 }

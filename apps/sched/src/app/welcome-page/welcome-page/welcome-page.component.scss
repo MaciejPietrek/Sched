@@ -1,0 +1,15 @@
+:host::ng-deep {
+  .p-megamenu.p-megamenu-vertical {
+    height: 100% !important;
+    width: unset !important;
+    border-radius: 0px !important;
+  }
+}
+
+:host {
+  height: 100vh;
+  width: 100vw;
+
+  display: grid;
+  grid-template-columns: auto 1fr;
+}

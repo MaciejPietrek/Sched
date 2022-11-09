@@ -1,3 +1,4 @@
+import { ProgressElementModule } from './../progress-element/progress-element.module';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -20,6 +21,7 @@ import { InputTextModule } from 'primeng/inputtext';
     GeneralLayoutModule,
     ButtonModule,
     RippleModule,
+    ProgressElementModule,
     InputTextModule,
     RouterModule,
   ],

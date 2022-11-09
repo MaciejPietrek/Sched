@@ -1,34 +1,41 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  combineLatest,
+  debounceTime,
+  map,
+  merge,
+  Observable,
+  Subject,
+} from 'rxjs';
 
 @Injectable()
 export class ProgressElementService {
   constructor() {
     const _turnedOn = new Subject<void>();
     const _turnedOff = new Subject<void>();
-    const _toggled = new BehaviorSubject<boolean>(false);
+
+    let currentValue = false;
 
     this.turnedOn = _turnedOn.asObservable();
-    this.turnedOff = _turnedOff.asObservable();
-    this.toggled = _toggled.asObservable();
+    this.turnedOff = _turnedOff.asObservable().pipe(debounceTime(1000));
+    this.toggled = merge(
+      this.turnedOn.pipe(map(() => true)),
+      this.turnedOff.pipe(map(() => false))
+    );
 
     this.toggle = () => {
-      const oldValue = _toggled.value;
-      const newValue = !oldValue;
+      currentValue = !currentValue;
 
-      if (newValue) _turnedOn.next();
+      if (currentValue) _turnedOn.next();
       else _turnedOff.next();
-
-      _toggled.next(newValue);
     };
 
     this.turnOn = () => {
-      _toggled.next(true);
       _turnedOn.next();
     };
 
     this.turnOff = () => {
-      _toggled.next(false);
       _turnedOff.next();
     };
   }

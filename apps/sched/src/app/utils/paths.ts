@@ -5,4 +5,6 @@ export const paths = {
   signOut: 'signOut',
   welcomePage: 'welcome',
   userPage: 'user',
+  souces: 'sources',
+  source: (sourceName: string) => `sources\\${sourceName}`,
 };
