@@ -155,6 +155,21 @@ export class ViewSourceController {
     return { data: result };
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Post('data/create')
+  async create(
+    @Body() body: { source: IViewSource; update: UpdateQuery<any> }
+  ) {
+    const model = this.getModel(body.source);
+    const result = await model.create(body.update);
+    if (!result)
+      throw new NotFoundException({
+        message: 'Data not found',
+        description: `Data for the datasource '${body.source.name}' could not be found`,
+      });
+    return { data: result };
+  }
+
   private getModel(source: IViewSource) {
     return (
       this.connection.models[source.options.collection] ??

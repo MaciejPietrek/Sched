@@ -1,0 +1,10 @@
+.actions-wrapper {
+  padding: 4px;
+  display: inline-grid;
+  grid-auto-flow: column;
+  gap: 4px;
+}
+
+.layout-form-actions {
+  grid-template-columns: auto 1fr 1fr;
+}

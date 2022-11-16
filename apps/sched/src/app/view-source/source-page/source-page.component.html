@@ -1,0 +1,64 @@
+<p-megaMenu
+  [model]="items"
+  class="layout-bar"
+  orientation="vertical"
+></p-megaMenu>
+
+<div class="layout-body" schedProgress #schedProgress="schedProgress">
+  <div class="layout-grid">
+    <ag-grid-angular
+      *ngIf="gridOptions | async as _gridOptions"
+      class="ag-theme-alpine"
+      [gridOptions]="_gridOptions"
+      [rowSelection]="'multiple'"
+      [rowData]="$any(data) | async"
+      [animateRows]="true"
+    ></ag-grid-angular>
+  </div>
+
+  <div class="layout-actions">
+    <div class="actions-wrapper">
+      <button
+        pButton
+        icon="pi pi-plus"
+        class="p-button-outlined"
+        (click)="onInsert()"
+      ></button>
+      <button
+        pButton
+        icon="pi pi-copy"
+        class="p-button-outlined"
+        (click)="onCopy()"
+      ></button>
+      <button pButton icon="pi pi-trash" class="p-button-outlined"></button>
+    </div>
+  </div>
+
+  <div class="layout-form-actions actions-wrapper">
+    <button
+      pButton
+      icon="pi pi-{{ iconType | async }}"
+      [disabled]="true"
+    ></button>
+    <button
+      pButton
+      [disabled]="!(selectedRow | async)"
+      type="button"
+      class="p-button-outlined"
+      label="Save"
+      (click)="onSave()"
+    ></button>
+    <button
+      pButton
+      [disabled]="!(selectedRow | async)"
+      type="button"
+      class="p-button-outlined"
+      label="Delete"
+    ></button>
+  </div>
+
+  <form fxFlex [formGroup]="reactiveForm" class="layout-form">
+    <ngx-monaco-editor formControlName="code" [options]="defaultMonacoOptions">
+    </ngx-monaco-editor>
+  </form>
+</div>

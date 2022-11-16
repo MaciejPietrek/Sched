@@ -9,6 +9,13 @@ export const handle401 = (handler: (httpError: any) => void) => {
     return EMPTY;
   });
 };
+export const handle404 = (handler: (httpError: any) => void) => {
+  return catchError((httpError: HttpResponse<any>) => {
+    if (httpError.status != 404) throw httpError;
+    handler(httpError);
+    return EMPTY;
+  });
+};
 
 export const handle = (handler: (httpError: any) => void) => {
   return catchError((httpError: HttpResponse<any>) => {

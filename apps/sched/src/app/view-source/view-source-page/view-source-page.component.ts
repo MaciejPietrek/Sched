@@ -42,7 +42,7 @@ export class ViewSourcePageComponent implements OnInit {
   ];
 
   reactiveForm = this.fb.group({
-    code: ['hej'],
+    code: [''],
   });
   rowData = [];
   pageGridDefinition: GridOptions = {
