@@ -6,6 +6,7 @@ const _Serializators = {
   number: (input: number) => String(input),
   boolean: (input: boolean) => (input ? 'true' : 'false'),
   date: (input: Date) => Number(input),
+  NOOP: (input: any) => input,
 };
 
 const _Deserializators = {
@@ -14,6 +15,7 @@ const _Deserializators = {
   number: (input: string) => Number(input),
   boolean: (input: string) => ({ true: true, false: false }[input] ?? null),
   date: (input: string) => new Date(input),
+  NOOP: (input: any) => input,
 };
 
 export class PStorage<T> {

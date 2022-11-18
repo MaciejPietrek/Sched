@@ -1,21 +1,22 @@
-import { ProgressElementModule } from './../progress-element/progress-element.module';
-import { ButtonModule } from 'primeng/button';
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ViewSourcePageComponent } from './view-source-page/view-source-page.component';
+import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
+import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
 import { AgGridModule } from 'ag-grid-angular';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { ButtonModule } from 'primeng/button';
 import { MegaMenuModule } from 'primeng/megamenu';
+import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
-import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
-import { ReactiveFormsModule } from '@angular/forms';
+import { TieredMenuModule } from 'primeng/tieredmenu';
+import { ProgressElementModule } from './../progress-element/progress-element.module';
 import { SourcePageComponent } from './source-page/source-page.component';
 
 const routes: Route[] = [
   {
     path: '',
-    component: ViewSourcePageComponent,
+    redirectTo: 'datasource',
   },
   {
     path: ':viewsourceName',
@@ -24,12 +25,14 @@ const routes: Route[] = [
 ];
 
 @NgModule({
-  declarations: [ViewSourcePageComponent, SourcePageComponent],
+  declarations: [SourcePageComponent],
   imports: [
     CommonModule,
     ButtonModule,
     AgGridModule,
     MenubarModule,
+    TieredMenuModule,
+    MenuModule,
     MegaMenuModule,
     BreadcrumbModule,
     MonacoEditorModule,
@@ -43,6 +46,6 @@ const routes: Route[] = [
       useValue: 'https://unpkg.com/monaco-editor@0.31.1/min/vs',
     },
   ],
-  exports: [ViewSourcePageComponent],
+  exports: [],
 })
 export class ViewSourceModule {}

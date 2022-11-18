@@ -13,6 +13,7 @@
       [rowSelection]="'multiple'"
       [rowData]="$any(data) | async"
       [animateRows]="true"
+      (gridReady)="onGridReady($event)"
     ></ag-grid-angular>
   </div>
 
@@ -42,7 +43,6 @@
     ></button>
     <button
       pButton
-      [disabled]="!(selectedRow | async)"
       type="button"
       class="p-button-outlined"
       label="Save"
@@ -50,10 +50,10 @@
     ></button>
     <button
       pButton
-      [disabled]="!(selectedRow | async)"
       type="button"
       class="p-button-outlined"
       label="Delete"
+      (click)="onDelete()"
     ></button>
   </div>
 

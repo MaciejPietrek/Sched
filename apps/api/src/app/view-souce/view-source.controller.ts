@@ -23,8 +23,8 @@ export class ViewSourceController {
   private readonly repo = new GenericRepo(this.viewSource);
 
   @UseGuards(JwtAuthGuard)
-  @Get('getByName/:name')
-  async getByName(@Param() param: { name: string }) {
+  @Post('getByName')
+  async getByName(@Body() param: { name: string }) {
     const document = await this.repo.findOneByField('name', param.name);
     const object = await document?.toObject();
     if (!object)
@@ -87,7 +87,7 @@ export class ViewSourceController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('data/findById')
+  @Post('data/findById')
   async findById(@Body() body: { source: IViewSource; ID: string }) {
     const model = this.getModel(body.source);
     const result = await model.findById(body.ID);
@@ -115,7 +115,7 @@ export class ViewSourceController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('data/findByIdAndDelete')
+  @Post('data/findByIdAndDelete')
   async findByIdAndDelete(@Body() body: { source: IViewSource; ID: string }) {
     const model = this.getModel(body.source);
     const result = await model.findByIdAndDelete(body.ID);
@@ -162,6 +162,7 @@ export class ViewSourceController {
   ) {
     const model = this.getModel(body.source);
     const result = await model.create(body.update);
+    console.log({ body, result });
     if (!result)
       throw new NotFoundException({
         message: 'Data not found',

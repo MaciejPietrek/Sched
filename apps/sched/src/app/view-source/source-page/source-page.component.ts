@@ -1,3 +1,4 @@
+import { PStorage } from './../../utils/storage';
 import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
@@ -10,8 +11,8 @@ import {
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
-import { GridOptions } from 'ag-grid-community';
-import { MegaMenuItem } from 'primeng/api';
+import { GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { MegaMenuItem, MenuItem } from 'primeng/api';
 import { BehaviorSubject, map, Subject, tap } from 'rxjs';
 import { ProgressElementService } from '../../progress-element/progress-element.service';
 import { navigationItem } from '../../utils/navigation-items';
@@ -21,47 +22,53 @@ import {
   handleProgress,
 } from './../../http-handlers/http-handler';
 import { SessionService } from './../../services/session/session.service';
+import { PStack } from '../../utils/stack';
+import { RequestService } from '../source.service';
 
 @Component({
   selector: 'sched-source',
   templateUrl: './source-page.component.html',
   styleUrls: ['./../../../basic-layout.scss', './source-page.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [RequestService],
 })
 export class SourcePageComponent implements AfterViewInit {
   constructor(
     private session: SessionService,
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private http: HttpClient
+    private requestService: RequestService
   ) {}
   ngAfterViewInit(): void {
+    this.requestService = this.requestService.useWith({
+      progress: this.progress,
+    });
     this.getGridOptions().subscribe();
   }
+
+  private lastSelectedRecordIDs = new PStack<string>();
 
   @HostBinding('class.layout-host') readonly layoutHost: boolean = true;
   @ViewChild(ProgressElementService) public progress!: ProgressElementService;
 
   private source: any;
-  private getGridOptions = () =>
-    this.http.get(`viewSource/getByName/${this.getViewSourceName()}`).pipe(
-      handleProgress(this.progress),
-      this.handle401,
-      tap((response: any) => this.getGridData(response.data)),
-      tap((response: any) => (this.source = response.data)),
-      this.getStructure,
-      this.mapToGridOptions,
-      tap((options) => this.gridOptions.next(options))
-    );
-
-  private getGridData = (viewSource: any) => {
-    this.http
-      .post(`viewSource/data/all`, viewSource)
+  private getGridOptions = () => {
+    return this.requestService.sources
+      .getSourceByName({ name: this.getViewSourceName()! })
       .pipe(
-        handleProgress(this.progress),
-        map((response: any) => response.data),
-        tap((data) => this.data.next(data))
-      )
+        this.handle401,
+        tap((response: any) => this.getViewSource(response)),
+        tap((response: any) => (this.source = response)),
+        this.getStructure,
+        this.mapToGridOptions,
+        tap((options) => this.gridOptions.next(options))
+      );
+  };
+
+  private getViewSource = (viewSource: any) => {
+    this.requestService.sources
+      .downloadAllRecords(viewSource)
+      .pipe(tap((response: any) => this.updateGridData(response)))
       .subscribe();
   };
 
@@ -69,19 +76,21 @@ export class SourcePageComponent implements AfterViewInit {
     this.route.snapshot.paramMap.get('viewsourceName');
 
   private handle401 = handle404(() => {});
-  private getStructure = map(
-    (response: any) => response?.data?.structure ?? {}
-  );
+  private getStructure = map((response: any) => response?.structure ?? {});
   private mapToGridOptions = map((structure: any) => {
     const gridOptions: GridOptions = {
       columnDefs: [],
+      getRowId: (row) => row.data['_id'],
       onRowSelected: (event) => {
+        console.log('onRowSelected');
         if (!event.node.isSelected()) return;
 
         event.api
           .getSelectedNodes()
           .filter((node) => node !== event.node)
           .forEach((node) => node.setSelected(false, false, true));
+
+        this.lastSelectedRecordIDs.set(event.node.data._id);
 
         const newValue = JSON.stringify(event.node.data, null, '\t');
         this.reactiveCode.setValue(newValue);
@@ -104,7 +113,7 @@ export class SourcePageComponent implements AfterViewInit {
     return gridOptions;
   });
 
-  public data = new Subject();
+  public data = new BehaviorSubject<any[]>([]);
   public selectedRow = new BehaviorSubject<{ _id: string } | undefined>(
     undefined
   );
@@ -124,18 +133,55 @@ export class SourcePageComponent implements AfterViewInit {
     this.reactiveForm.setValue({ code: asString });
     this.iconType.next('copy');
   };
+  public onDelete = () => {
+    const oldValue = this.reactiveCode.value;
+    if (!oldValue) return;
+
+    const asJson = JSON.parse(oldValue || '{}');
+    this.requestService.sources
+      .deleteSingleRecord({ source: this.source, ID: asJson._id })
+      .subscribe(this.refreshAll);
+  };
+  private refreshAll = () => {
+    this.requestService.sources
+      .downloadAllRecords(this.source)
+      .subscribe((records: any) => {
+        const api = this.gridReady.api;
+        api.setRowData(records);
+
+        let selectedRowID = this.lastSelectedRecordIDs.pop();
+        let selectedRow = api.getRowNode(selectedRowID);
+
+        while (selectedRowID && !selectedRow) {
+          selectedRowID = this.lastSelectedRecordIDs.pop();
+          selectedRow = api.getRowNode(selectedRowID);
+        }
+        selectedRow?.setSelected(true);
+      });
+  };
+
+  private gridReady!: GridReadyEvent;
+  public onGridReady(gridReady: GridReadyEvent<any>) {
+    this.gridReady = gridReady;
+  }
+
+  private updateGridData = (data: any[]) => this.data.next(data);
+
   public onSave = () => {
     switch (this.iconType.value) {
+      case 'plus':
       case 'copy': {
         const newValue = this.reactiveCode.value;
         const asJson = JSON.parse(newValue);
         delete asJson._id;
-        this.http
-          .post('viewSource/data/create', {
-            source: this.source,
-            update: asJson,
-          })
-          .pipe(handleProgress(this.progress))
+        this.requestService.sources
+          .createNewRecord({ source: this.source, update: asJson })
+          .pipe(
+            tap((response: any) =>
+              this.lastSelectedRecordIDs.set(response._id)
+            ),
+            tap(this.refreshAll)
+          )
           .subscribe();
         break;
       }
@@ -143,19 +189,16 @@ export class SourcePageComponent implements AfterViewInit {
         const newValue = this.reactiveCode.value;
         const asJson = JSON.parse(newValue);
         delete asJson._id;
-        this.http
-          .post('viewSource/data/findByIdAndUpdate', {
+        this.requestService.sources
+          .findAndUpdate({
             source: this.source,
-            ID: this.selectedRow.value?._id,
+            ID: this.selectedRow.value!._id,
             update: asJson,
           })
-          .pipe(handleProgress(this.progress))
+          .pipe(tap(this.refreshAll))
           .subscribe();
         break;
       }
-      case 'plus':
-        break;
-
       default:
         break;
     }

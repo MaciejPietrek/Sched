@@ -30,8 +30,6 @@ export class JwtInterceptorService implements HttpInterceptor {
 
     const newRequest = req.clone(update);
 
-    return next
-      .handle(newRequest)
-      .pipe(handle401(() => this.router.navigateByUrl(paths.signOut))) as any;
+    return next.handle(newRequest);
   }
 }
