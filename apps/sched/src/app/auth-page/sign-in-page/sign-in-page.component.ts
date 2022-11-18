@@ -1,23 +1,13 @@
-import { SessionService } from './../../services/session/session.service';
+import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { RequestService } from './../../view-source/source.service';
-import { ProgressElementService } from './../../progress-element/progress-element.service';
 import { BehaviorSubject, tap } from 'rxjs';
-import { paths } from './../../utils/paths';
-import {
-  Component,
-  OnInit,
-  ElementRef,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
-import { AuthPageService } from '../auth-page.service';
-import {
-  handle,
-  handle401,
-  handleProgress,
-} from '../../http-handlers/http-handler';
+import { handle, handle401 } from '../../http-handlers/http-handler';
 import { signInGuardReturnURL } from '../../utils/storages';
+import { AuthPageService } from '../auth-page.service';
+import { ProgressElementService } from './../../progress-element/progress-element.service';
+import { SessionService } from './../../services/session/session.service';
+import { paths } from './../../utils/paths';
+import { RequestService } from './../../view-source/source.service';
 
 @Component({
   selector: 'sched-sign-in-page',

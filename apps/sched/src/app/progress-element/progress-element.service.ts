@@ -1,13 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  debounceTime,
-  map,
-  merge,
-  Observable,
-  Subject,
-} from 'rxjs';
+import { debounceTime, map, merge, Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class ProgressElementService {

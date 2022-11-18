@@ -1,5 +1,5 @@
-import { SessionService } from './../../services/session/session.service';
 import { Component, OnInit } from '@angular/core';
+import { SessionService } from './../../services/session/session.service';
 
 const someJwt =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';

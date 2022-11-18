@@ -1,4 +1,3 @@
-import { SessionService } from './../services/session/session.service';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -9,6 +8,7 @@ import {
 } from '@angular/router';
 import { Observable } from 'rxjs';
 import { paths } from '../utils/paths';
+import { SessionService } from './../services/session/session.service';
 
 type ActivationResult =
   | Observable<boolean | UrlTree>

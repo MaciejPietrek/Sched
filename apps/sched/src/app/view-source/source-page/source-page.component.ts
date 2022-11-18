@@ -1,29 +1,22 @@
-import { PStorage } from './../../utils/storage';
-import { HttpClient } from '@angular/common/http';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  OnInit,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
-import { GridApi, GridOptions, GridReadyEvent } from 'ag-grid-community';
-import { MegaMenuItem, MenuItem } from 'primeng/api';
+import { GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { MegaMenuItem } from 'primeng/api';
 import { BehaviorSubject, map, Subject, tap } from 'rxjs';
 import { ProgressElementService } from '../../progress-element/progress-element.service';
 import { navigationItem } from '../../utils/navigation-items';
-import {
-  handle404,
-  handle401,
-  handleProgress,
-} from './../../http-handlers/http-handler';
-import { SessionService } from './../../services/session/session.service';
 import { PStack } from '../../utils/stack';
 import { RequestService } from '../source.service';
+import { handle404 } from './../../http-handlers/http-handler';
+import { SessionService } from './../../services/session/session.service';
 
 @Component({
   selector: 'sched-source',

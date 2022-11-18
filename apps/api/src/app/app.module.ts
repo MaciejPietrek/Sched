@@ -5,8 +5,6 @@ import { environment } from '../environments/environment.prod';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { ViewSourceSchema } from './schemes/view-source.schema';
-import { JwtStrategy } from './strategy/jwt.strategy';
-import { LocalStrategy } from './strategy/local.strategy';
 import { ViewSourceController } from './view-souce/view-source.controller';
 
 const main = environment.mongoDB.main;

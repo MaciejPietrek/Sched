@@ -1,4 +1,3 @@
-import { SessionService } from '../services/session/session.service';
 import { Injectable } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
@@ -8,6 +7,7 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { SessionService } from '../services/session/session.service';
 import { paths } from '../utils/paths';
 import { signInGuardReturnURL } from '../utils/storages';
 

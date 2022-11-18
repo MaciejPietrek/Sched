@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { PStorage } from '../../utils/storage';
 import { Jwt, JwtSession } from './session.interface';
 import { jwtS, sessionInitialitedS, sessionS } from './session.storage';
 

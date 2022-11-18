@@ -1,11 +1,11 @@
-import { Router } from '@angular/router';
-import { handleProgress, handle401 } from './../http-handlers/http-handler';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Optional } from '@angular/core';
-import { ProgressElementService } from '../progress-element/progress-element.service';
-import { map, pipe } from 'rxjs';
+import { Router } from '@angular/router';
 import { IDatasource } from 'ag-grid-community';
+import { map } from 'rxjs';
+import { ProgressElementService } from '../progress-element/progress-element.service';
 import { paths } from '../utils/paths';
+import { handle401, handleProgress } from './../http-handlers/http-handler';
 
 const getData = map((response: any) => response.data);
 

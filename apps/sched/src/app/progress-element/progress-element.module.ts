@@ -1,7 +1,7 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProgressElementComponent } from './progress-element.component';
+import { NgModule } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ProgressElementComponent } from './progress-element.component';
 import { ProgressDirective } from './progress.directive';
 
 @NgModule({

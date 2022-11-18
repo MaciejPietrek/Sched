@@ -1,4 +1,3 @@
-import { MegaMenuItem, MenuItem } from 'primeng/api';
 import { paths } from './paths';
 
 export const navigationItem = {

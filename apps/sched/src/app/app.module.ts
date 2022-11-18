@@ -1,7 +1,7 @@
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DevModule } from './dev/dev.module';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DevModule } from './dev/dev.module';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ButtonModule } from 'primeng/button';

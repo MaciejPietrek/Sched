@@ -1,11 +1,9 @@
-import { SessionService } from './../../services/session/session.service';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { ColDef, GridOptions } from 'ag-grid-community';
 import { MegaMenuItem } from 'primeng/api';
-import { paths } from '../../utils/paths';
-import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cell-renderer.component';
 import { navigationItem } from '../../utils/navigation-items';
+import { BtnCellRendererComponent } from './../../grid/btn-cell-renderer/btn-cell-renderer.component';
+import { SessionService } from './../../services/session/session.service';
 
 @Component({
   selector: 'sched-main-page',

@@ -1,8 +1,7 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtConstants } from '../auth/jwt-contants';
-import { AuthService } from '../auth/auth.service';
 import { IJwtToken } from '../auth/jwt-token.interface';
 
 const unauthorized = new UnauthorizedException();

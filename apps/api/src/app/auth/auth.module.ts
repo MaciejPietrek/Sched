@@ -1,14 +1,14 @@
-import { ViewSourceSchema } from '../schemes/view-source.schema';
 import { Module } from '@nestjs/common';
-import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
-import { jwtConstants } from './jwt-contants';
 import { MongooseModule } from '@nestjs/mongoose';
-import { UserSchema } from '../schemes/user.schema';
+import { PassportModule } from '@nestjs/passport';
 import { JwtAuthGuard } from '../guards/jwt.guard';
-import { LocalStrategy } from '../strategy/local.strategy';
+import { UserSchema } from '../schemes/user.schema';
+import { ViewSourceSchema } from '../schemes/view-source.schema';
 import { JwtStrategy } from '../strategy/jwt.strategy';
+import { LocalStrategy } from '../strategy/local.strategy';
 import { AuthService } from './auth.service';
+import { jwtConstants } from './jwt-contants';
 import { UserService } from './user.service';
 
 const models = [

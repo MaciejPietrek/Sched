@@ -1,7 +1,7 @@
-import { paths } from './../../utils/paths';
-import { SessionService } from './../../services/session/session.service';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { SessionService } from './../../services/session/session.service';
+import { paths } from './../../utils/paths';
 
 @Component({
   selector: 'sched-sign-out-page',

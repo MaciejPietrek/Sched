@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MainPageComponent } from './main-page/main-page.component';
-import { Routes, RouterModule } from '@angular/router';
-import { MenubarModule } from 'primeng/menubar';
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { AgGridModule } from 'ag-grid-angular';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { MegaMenuModule } from 'primeng/megamenu';
+import { MenubarModule } from 'primeng/menubar';
+import { MainPageComponent } from './main-page/main-page.component';
 
 const routes: Routes = [
   {

@@ -1,7 +1,6 @@
-import { SessionService } from './../services/session/session.service';
-import { Subject } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { JwtSession } from '../services/session/session.interface';
+import { SessionService } from './../services/session/session.service';
 
 @Component({
   selector: 'sched-user-page',

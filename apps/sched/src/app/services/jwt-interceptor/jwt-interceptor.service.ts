@@ -1,6 +1,3 @@
-import { paths } from './../../utils/paths';
-import { handle401 } from './../../http-handlers/http-handler';
-import { SessionService } from './../session/session.service';
 import {
   HttpEvent,
   HttpHandler,
@@ -8,8 +5,9 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { SessionService } from './../session/session.service';
 
 @Injectable()
 export class JwtInterceptorService implements HttpInterceptor {
