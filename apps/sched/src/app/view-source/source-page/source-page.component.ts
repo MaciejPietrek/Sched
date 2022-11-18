@@ -75,7 +75,6 @@ export class SourcePageComponent implements AfterViewInit {
       columnDefs: [],
       getRowId: (row) => row.data['_id'],
       onRowSelected: (event) => {
-        console.log('onRowSelected');
         if (!event.node.isSelected()) return;
 
         event.api

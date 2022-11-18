@@ -162,7 +162,6 @@ export class ViewSourceController {
   ) {
     const model = this.getModel(body.source);
     const result = await model.create(body.update);
-    console.log({ body, result });
     if (!result)
       throw new NotFoundException({
         message: 'Data not found',

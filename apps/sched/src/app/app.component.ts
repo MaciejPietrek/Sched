@@ -12,6 +12,5 @@ export class AppComponent {
   @HostListener('window:keydown.alt.control.1', ['$event'])
   handleDevComponentTrigger() {
     this.showShedDev.next(!this.showShedDev.value);
-    console.log(this.showShedDev.value);
   }
 }
