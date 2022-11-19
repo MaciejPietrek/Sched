@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import { IDatasource } from 'ag-grid-community';
-import { map } from 'rxjs';
+import { map, mergeMap } from 'rxjs';
 import { ProgressElementService } from '../progress-element/progress-element.service';
 import { paths } from '../utils/paths';
 import { handle401, handleProgress } from './../http-handlers/http-handler';
@@ -52,9 +52,9 @@ export class RequestService {
         result = result.pipe(handle);
       }
       if (creationOptions?.handle401 ?? true) {
-        const handle: any = handle401(() =>
-          this.router.navigateByUrl(paths.signOut)
-        );
+        const handle: any = handle401(() => {
+          this.router.navigateByUrl(paths.signOut);
+        });
         result = result.pipe(handle);
       }
       if (creationOptions?.getData ?? true) {
@@ -83,6 +83,26 @@ export class RequestService {
     'viewSource/getByName'
   );
 
+  private findRecordByName = this.createRequest<{
+    source: IDatasource;
+    name: string;
+  }>('viewSource/data/findByName');
+
+  private findRecordOfSourceByName = (data: {
+    sourceName: string;
+    recordName: string;
+  }) =>
+    this.getSourceByName({ name: data.sourceName }).pipe(
+      mergeMap((response: any) =>
+        this.findRecordByName({ source: response, name: data.recordName })
+      )
+    );
+
+  private findRecordById = this.createRequest<{
+    source: IDatasource;
+    name: string;
+  }>('viewSource/data/findByName');
+
   private createNewRecord = this.createRequest<{
     source: IDatasource;
     update: any;
@@ -95,6 +115,9 @@ export class RequestService {
   }>('viewSource/data/findByIdAndUpdate');
 
   public sources = {
+    findRecordByName: this.findRecordByName,
+    findRecordOfSourceByName: this.findRecordOfSourceByName,
+    findRecordById: this.findRecordById,
     downloadSingleRecord: this.downloadSingleRecord,
     downloadAllRecords: this.downloadAllRecords,
     deleteSingleRecord: this.deleteSingleRecord,

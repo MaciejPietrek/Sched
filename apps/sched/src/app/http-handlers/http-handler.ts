@@ -1,5 +1,5 @@
 import { HttpResponse } from '@angular/common/http';
-import { catchError, EMPTY, finalize } from 'rxjs';
+import { catchError, EMPTY, finalize, Observable } from 'rxjs';
 import { ProgressElementService } from './../progress-element/progress-element.service';
 import { PStorage } from './../utils/storage';
 
@@ -17,28 +17,32 @@ const codes = {
 const error = (code: number) =>
   errorHandleExtras.set({ location: location.pathname, errorCode: code });
 
-export const handle401 = (handler: (httpError: any) => void) => {
+export const handle401 = (
+  handler: (httpError: any) => Observable<any> | void
+) => {
   return catchError((httpError: HttpResponse<any>) => {
     if (httpError.status != 401) throw httpError;
     error(codes.unauthorized);
-    handler(httpError);
-    return EMPTY;
+
+    return handler(httpError) ?? EMPTY;
   });
 };
-export const handle404 = (handler: (httpError: any) => void) => {
+export const handle404 = (
+  handler: (httpError: any) => Observable<any> | void
+) => {
   return catchError((httpError: HttpResponse<any>) => {
     if (httpError.status != 404) throw httpError;
     error(codes.notFound);
-    handler(httpError);
-    return EMPTY;
+
+    return handler(httpError) ?? EMPTY;
   });
 };
 
-export const handle = (handler: (httpError: any) => void) => {
+export const handle = (handler: (httpError: any) => Observable<any> | void) => {
   return catchError((httpError: HttpResponse<any>) => {
     error(codes.unknown);
-    handler(httpError);
-    return EMPTY;
+
+    return handler(httpError) ?? EMPTY;
   });
 };
 

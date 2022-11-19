@@ -8,15 +8,27 @@ import {
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
-import { GridOptions, GridReadyEvent } from 'ag-grid-community';
+import { ColDef, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import { MegaMenuItem } from 'primeng/api';
-import { BehaviorSubject, map, Subject, tap } from 'rxjs';
+import { BehaviorSubject, forkJoin, of, Subject, tap } from 'rxjs';
 import { ProgressElementService } from '../../progress-element/progress-element.service';
 import { navigationItem } from '../../utils/navigation-items';
 import { PStack } from '../../utils/stack';
 import { RequestService } from '../source.service';
 import { handle404 } from './../../http-handlers/http-handler';
 import { SessionService } from './../../services/session/session.service';
+
+const templateColumnDef: GridOptions = {
+  columnDefs: [
+    {
+      field: 'jakies.pole',
+      headerName: 'Jakaś nazwa',
+      sortable: true,
+      sortingOrder: ['asc', 'desc', null],
+      valueFormatter: 'NazwaFormattera',
+    },
+  ],
+};
 
 @Component({
   selector: 'sched-source',
@@ -46,33 +58,50 @@ export class SourcePageComponent implements AfterViewInit {
 
   private source: any;
   private getGridOptions = () => {
-    return this.requestService.sources
-      .getSourceByName({ name: this.getViewSourceName()! })
-      .pipe(
-        this.handle401,
-        tap((response: any) => this.getViewSource(response)),
-        tap((response: any) => (this.source = response)),
-        this.getStructure,
-        this.mapToGridOptions,
-        tap((options) => this.gridOptions.next(options))
-      );
+    const columnDefs = this.requestService.sources
+      .findRecordOfSourceByName({
+        recordName: this.getViewSourceName()!,
+        sourceName: 'gridOptions',
+      })
+      .pipe(handle404(() => of({ columnDefs: [] })));
+
+    const source = this.requestService.sources.getSourceByName({
+      name: this.getViewSourceName()!,
+    });
+
+    const sourceAndData = source.pipe(
+      tap((response: any) => (this.source = response)),
+      tap((response: any) => this.getViewData(response))
+    );
+
+    return forkJoin([columnDefs, sourceAndData]).pipe(
+      tap((data: any[]) => {
+        const columnDefs = data[0].columnDefs;
+        const structure = data[1].structure;
+        const gridOptions = this.mapToGridOptions(structure, columnDefs);
+        this.gridOptions.next(gridOptions);
+      })
+    );
   };
 
-  private getViewSource = (viewSource: any) => {
+  private getViewData = (viewSource: any) =>
     this.requestService.sources
       .downloadAllRecords(viewSource)
       .pipe(tap((response: any) => this.updateGridData(response)))
       .subscribe();
-  };
 
   private getViewSourceName = () =>
     this.route.snapshot.paramMap.get('viewsourceName');
 
-  private handle401 = handle404(() => {});
-  private getStructure = map((response: any) => response?.structure ?? {});
-  private mapToGridOptions = map((structure: any) => {
+  private mapToGridOptions = (structure: any, columnDefs: ColDef[]) => {
+    columnDefs = columnDefs.map((def) => ({
+      ...def,
+      sortable: true,
+      sortingOrder: ['asc', 'desc', null],
+    }));
+
     const gridOptions: GridOptions = {
-      columnDefs: [],
+      columnDefs,
       getRowId: (row) => row.data['_id'],
       onRowSelected: (event) => {
         if (!event.node.isSelected()) return;
@@ -93,17 +122,18 @@ export class SourcePageComponent implements AfterViewInit {
       rowSelection: 'multiple',
     };
 
-    Object.entries(structure).forEach(([key]) => {
-      gridOptions.columnDefs?.push({
-        field: key,
-        valueFormatter: (input) => {
-          return JSON.stringify(input.value);
-        },
+    if (!gridOptions.columnDefs?.length)
+      Object.entries(structure).forEach(([key]) => {
+        gridOptions.columnDefs?.push({
+          field: key,
+          valueFormatter: (input) => {
+            return JSON.stringify(input.value);
+          },
+        });
       });
-    });
 
     return gridOptions;
-  });
+  };
 
   public data = new BehaviorSubject<any[]>([]);
   public selectedRow = new BehaviorSubject<{ _id: string } | undefined>(

@@ -100,6 +100,19 @@ export class ViewSourceController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Post('data/findByName')
+  async findByName(@Body() body: { source: IViewSource; name: string }) {
+    const model = this.getModel(body.source);
+    const result = await model.findOne({ name: { $eq: body.name } });
+    if (!result)
+      throw new NotFoundException({
+        message: 'Data not found',
+        description: `Data for the datasource '${body.source.name}' could not be found`,
+      });
+    return { data: result };
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('data/findOne')
   async findOne(
     @Body() body: { source: IViewSource; filter: FilterQuery<any> }
