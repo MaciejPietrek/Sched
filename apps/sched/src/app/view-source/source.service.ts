@@ -145,4 +145,13 @@ export class RequestService {
     signOut: this.signOut,
     signUp: this.signUp,
   };
+
+  private triggerHello = this.createRequest<{}>('hello', {
+    getData: false,
+    handleProgress: false,
+  });
+
+  public test = {
+    triggerHello: this.triggerHello,
+  };
 }

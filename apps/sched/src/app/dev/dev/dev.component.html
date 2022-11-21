@@ -3,5 +3,8 @@
     type="text"
     (input)="jwtString = $any($event).target.value"
     [value]="jwtString"
-  /><button (click)="signIn()">signIn</button>
+  />
+  <button (click)="signIn()">signIn</button>
+  <span>trigger @Post('hello')</span>
+  <button (click)="triggerHello()">go!</button>
 </div>

@@ -1,3 +1,4 @@
+import { IResponse } from '@mfe-app/api-interfaces';
 import {
   Body,
   Controller,
@@ -6,19 +7,38 @@ import {
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
-
-import { IResponse } from '@mfe-app/api-interfaces';
-
+import { Schema } from 'mongoose';
 import { AuthService } from './auth/auth.service';
 import { IUserLogin } from './auth/user.interface';
+
+var mongoosify = require('mongoosify');
 
 @Controller()
 export class AppController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('hello')
-  sayHello(): string {
-    return 'hello';
+  @Post('hello')
+  sayHello() {
+    const schema = {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      title: 'Generated schema for Root',
+      type: 'object',
+      properties: {
+        hello: {
+          type: 'string',
+        },
+      },
+      required: ['hello'],
+    };
+
+    const mongooseSchema = mongoosify(schema);
+
+    const instanceSchema = new Schema(mongooseSchema);
+    console.log(mongooseSchema);
+    console.log(instanceSchema);
+    //@ts-ignore
+    console.log(JSON.stringify(instanceSchema.tree));
+    return { hello: 'hello' };
   }
 
   @Get('checkConnection')
