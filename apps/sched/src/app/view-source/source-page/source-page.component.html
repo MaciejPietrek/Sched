@@ -57,8 +57,20 @@
     ></button>
   </div>
 
-  <form fxFlex [formGroup]="reactiveForm" class="layout-form">
+  <form
+    fxFlex
+    *ngIf="!(formOptions | async)"
+    [formGroup]="reactiveForm"
+    class="layout-form"
+  >
     <ngx-monaco-editor formControlName="code" [options]="defaultMonacoOptions">
     </ngx-monaco-editor>
   </form>
+  <sched-form
+    class="layout-form"
+    *ngIf="formOptions | async as _formOptions"
+    [formOptions]="_formOptions"
+    [(value)]="dynamicFormData"
+  >
+  </sched-form>
 </div>

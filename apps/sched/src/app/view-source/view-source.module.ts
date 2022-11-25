@@ -10,6 +10,7 @@ import { MegaMenuModule } from 'primeng/megamenu';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 import { TieredMenuModule } from 'primeng/tieredmenu';
+import { SchedFormModule } from '../sched-form/sched-form.module';
 import { ProgressElementModule } from './../progress-element/progress-element.module';
 import { SourcePageComponent } from './source-page/source-page.component';
 
@@ -34,6 +35,7 @@ const routes: Route[] = [
     TieredMenuModule,
     MenuModule,
     MegaMenuModule,
+    SchedFormModule,
     BreadcrumbModule,
     MonacoEditorModule,
     ReactiveFormsModule,

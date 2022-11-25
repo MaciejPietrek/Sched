@@ -1,0 +1,66 @@
+<ng-template
+  #controlTemplate
+  let-control="control"
+  let-name="name"
+  let-inset="inset"
+>
+  <div class="form-group" *ngIf="isInstanceOfFormGroup(control)">
+    <div class="form-group-label">{{ name }}</div>
+    <div
+      class="form-group-elements"
+      *ngFor="let item of control.controls | keyvalue"
+    >
+      <ng-template
+        *ngTemplateOutlet="
+          controlTemplate;
+          context: { control: item.value, name: item.key, inset: inset + 1 }
+        "
+      ></ng-template>
+    </div>
+  </div>
+  <div class="form-array" *ngIf="isInstanceOfFormArray(control)">
+    <div class="form-array-label">{{ name }}</div>
+    <div
+      class="form-array-elements"
+      *ngFor="let item of control.controls | keyvalue"
+    >
+      <button (click)="onRemove($any(item.value), $any(item.key))">-</button>
+      <button (click)="onCopy($any(item.value), $any(item.key))">+</button>
+      <ng-template
+        *ngTemplateOutlet="
+          controlTemplate;
+          context: { control: item.value, name: item.key, inset: inset + 1 }
+        "
+      ></ng-template>
+    </div>
+  </div>
+  <span
+    class="p-float-label input-wrapper form-control"
+    *ngIf="isInstanceOfFormControl(control)"
+  >
+    <input
+      matInput
+      pInputText
+      type="text"
+      class="p-inputtext-sm control-input"
+      [id]="name"
+      [formControl]="control"
+    />
+    <label [for]="name" class="control-label">{{ name }}</label>
+  </span>
+</ng-template>
+
+<form
+  *ngIf="formGroup | async as _formGroup"
+  [formGroup]="_formGroup"
+  class="control-group"
+>
+  <div *ngFor="let item of _formGroup.controls | keyvalue">
+    <ng-template
+      *ngTemplateOutlet="
+        controlTemplate;
+        context: { control: item.value, name: item.key, inset: 1 }
+      "
+    ></ng-template>
+  </div>
+</form>

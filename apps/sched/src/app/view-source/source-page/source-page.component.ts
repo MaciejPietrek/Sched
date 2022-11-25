@@ -10,25 +10,14 @@ import { ActivatedRoute } from '@angular/router';
 import { MonacoEditorConstructionOptions } from '@materia-ui/ngx-monaco-editor';
 import { ColDef, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import { MegaMenuItem } from 'primeng/api';
-import { BehaviorSubject, forkJoin, of, Subject, tap } from 'rxjs';
+import { BehaviorSubject, forkJoin, map, of, Subject, tap } from 'rxjs';
 import { ProgressElementService } from '../../progress-element/progress-element.service';
+import { FormOptions } from '../../sched-form/form-options';
 import { navigationItem } from '../../utils/navigation-items';
 import { PStack } from '../../utils/stack';
 import { RequestService } from '../source.service';
 import { handle404 } from './../../http-handlers/http-handler';
 import { SessionService } from './../../services/session/session.service';
-
-const templateColumnDef: GridOptions = {
-  columnDefs: [
-    {
-      field: 'jakies.pole',
-      headerName: 'Jakaś nazwa',
-      sortable: true,
-      sortingOrder: ['asc', 'desc', null],
-      valueFormatter: 'NazwaFormattera',
-    },
-  ],
-};
 
 @Component({
   selector: 'sched-source',
@@ -58,12 +47,20 @@ export class SourcePageComponent implements AfterViewInit {
 
   private source: any;
   private getGridOptions = () => {
-    const columnDefs = this.requestService.sources
+    const gridOptions = this.requestService.sources
       .findRecordOfSourceByName({
         recordName: this.getViewSourceName()!,
         sourceName: 'gridOptions',
       })
       .pipe(handle404(() => of({ columnDefs: [] })));
+
+    const formOptions = this.requestService.sources
+      .findRecordOfSourceByName({
+        recordName: this.getViewSourceName()!,
+        sourceName: 'formOptions',
+      })
+      .pipe(map((options: any) => options.formDefinition))
+      .pipe(handle404(() => of(null)));
 
     const source = this.requestService.sources.getSourceByName({
       name: this.getViewSourceName()!,
@@ -74,15 +71,21 @@ export class SourcePageComponent implements AfterViewInit {
       tap((response: any) => this.getViewData(response))
     );
 
-    return forkJoin([columnDefs, sourceAndData]).pipe(
+    return forkJoin([gridOptions, sourceAndData, formOptions]).pipe(
       tap((data: any[]) => {
-        const columnDefs = data[0].columnDefs;
-        const structure = data[1].structure;
-        const gridOptions = this.mapToGridOptions(structure, columnDefs);
-        this.gridOptions.next(gridOptions);
+        const _columnDefs = data[0].columnDefs;
+        const _structure = data[1].structure;
+        const _formOptions = data[2];
+
+        console.log({ _columnDefs, _structure, _formOptions });
+        const _gridOptions = this.mapToGridOptions(_structure, _columnDefs);
+        this.gridOptions.next(_gridOptions);
+        this.formOptions.next(_formOptions);
       })
     );
   };
+
+  public dynamicFormData: any;
 
   private getViewData = (viewSource: any) =>
     this.requestService.sources
@@ -117,6 +120,7 @@ export class SourcePageComponent implements AfterViewInit {
         this.reactiveCode.setValue(newValue);
         this.selectedRow.next(event.node.data);
         this.iconType.next('pencil');
+        this.dynamicFormData = event.node.data;
       },
       suppressRowDeselection: true,
       rowSelection: 'multiple',
@@ -238,6 +242,7 @@ export class SourcePageComponent implements AfterViewInit {
   ];
 
   public gridOptions = new Subject<GridOptions>();
+  public formOptions = new Subject<FormOptions>();
 
   public reactiveForm = this.fb.group({
     code: [''],

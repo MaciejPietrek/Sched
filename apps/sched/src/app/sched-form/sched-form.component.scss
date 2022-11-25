@@ -1,0 +1,42 @@
+:host {
+  display: grid;
+  place-items: center;
+}
+
+.form-group,
+.form-array {
+  border: 1px solid red;
+}
+
+.input-wrapper {
+  margin-top: 16px;
+}
+
+.input-wrapper:has(input:focus),
+.input-wrapper:has(.p-filled) {
+  .control-label {
+    border-left: 1px solid currentColor;
+    border-right: 1px solid currentColor;
+    top: -7px;
+    border: solid #ced4da;
+    border-width: 1px 1px 0px 1px;
+    padding: 0px 4px 2px 4px;
+    border-radius: 4px 4px 0px 0px;
+  }
+}
+
+.input-wrapper:hover,
+.input-wrapper:has(input:focus) {
+  .control-label {
+    border-color: rgb(59, 130, 246);
+  }
+}
+
+.control-input:focus {
+  box-shadow: unset;
+}
+
+.form-array,
+.form-group {
+  margin-left: 20px;
+}
