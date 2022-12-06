@@ -1,0 +1,45 @@
+:host {
+  display: grid;
+  place-items: center;
+  margin: auto;
+  height: 100vh;
+  background: url('/assets/bg3.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
+
+form {
+  display: contents;
+}
+
+.error-message {
+  color: orangered;
+  background-color: white;
+  padding: 0.25em;
+  border-radius: 0.25em;
+}
+
+.form-wrapper {
+  overflow: hidden;
+  padding: 2em;
+  border-radius: 2em;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.white-bg {
+  background-color: white !important;
+}
+
+.name-text {
+  font-size: 18px;
+  paint-order: stroke;
+  stroke: #000000;
+  stroke-width: 1px;
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+  font-weight: 800;
+}

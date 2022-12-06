@@ -4,40 +4,68 @@
   let-name="name"
   let-inset="inset"
 >
-  <div class="form-group" *ngIf="isInstanceOfFormGroup(control)">
-    <div class="form-group-label">{{ name }}</div>
-    <div
-      class="form-group-elements"
-      *ngFor="let item of control.controls | keyvalue"
-    >
+  <div
+    class="form-group"
+    *ngIf="isInstanceOfFormGroup(control)"
+    [ngStyle]="control.definition.style"
+  >
+    <div class="form-group-label">{{ control.definition.label || name }}</div>
+    <ng-container *ngFor="let item of control.controls | keyvalue">
       <ng-template
         *ngTemplateOutlet="
           controlTemplate;
           context: { control: item.value, name: item.key, inset: inset + 1 }
         "
       ></ng-template>
-    </div>
+    </ng-container>
   </div>
-  <div class="form-array" *ngIf="isInstanceOfFormArray(control)">
-    <div class="form-array-label">{{ name }}</div>
+  <div
+    class="form-array"
+    *ngIf="isInstanceOfFormArray(control)"
+    [style.grid-area]="control.definition.style?.['grid-area']"
+  >
+    <div class="form-array-label">
+      <span>{{ control.definition.label || name }}</span>
+      <span
+        *ngIf="control.controls.length == 0"
+        class="control-label label-button"
+        (click)="onNewElement(control)"
+        ><i class="pi pi-plus"></i
+      ></span>
+    </div>
     <div
       class="form-array-elements"
-      *ngFor="let item of control.controls | keyvalue"
+      *ngFor="let _control of control.controls; let i = index"
     >
-      <button (click)="onRemove($any(item.value), $any(item.key))">-</button>
-      <button (click)="onCopy($any(item.value), $any(item.key))">+</button>
+      <span
+        class="control-label label-button"
+        (click)="onRemove($any(_control), i)"
+        *ngIf="control.definition.min ?? 0 < control.controls.length"
+        ><i class="pi pi-trash"></i
+      ></span>
+      <span
+        class="control-label label-button"
+        (click)="onCopy($any(_control), i)"
+        *ngIf="control.definition.max ?? 99 > control.controls.length"
+        ><i class="pi pi-plus"></i
+      ></span>
       <ng-template
         *ngTemplateOutlet="
           controlTemplate;
-          context: { control: item.value, name: item.key, inset: inset + 1 }
+          context: { control: _control, name: i, inset: inset + 1 }
         "
       ></ng-template>
     </div>
   </div>
   <span
-    class="p-float-label input-wrapper form-control"
+    class="input-wrapper form-control"
     *ngIf="isInstanceOfFormControl(control)"
+    [style.grid-area]="control.definition.style?.['grid-area']"
   >
+    <label [for]="name" class="control-label">{{
+      control.definition.label || name
+    }}</label>
+    <br />
     <input
       matInput
       pInputText
@@ -46,21 +74,22 @@
       [id]="name"
       [formControl]="control"
     />
-    <label [for]="name" class="control-label">{{ name }}</label>
   </span>
 </ng-template>
 
 <form
   *ngIf="formGroup | async as _formGroup"
   [formGroup]="_formGroup"
+  [style.grid-template-areas]="$any(_formGroup).definition?.style?.['grid-template-areas']"
+  [style.display]="$any(_formGroup).definition?.style?.['display']"
   class="control-group"
 >
-  <div *ngFor="let item of _formGroup.controls | keyvalue">
+  <ng-container *ngFor="let item of _formGroup.controls | keyvalue">
     <ng-template
       *ngTemplateOutlet="
         controlTemplate;
         context: { control: item.value, name: item.key, inset: 1 }
       "
     ></ng-template>
-  </div>
+  </ng-container>
 </form>

@@ -31,7 +31,12 @@
         class="p-button-outlined"
         (click)="onCopy()"
       ></button>
-      <button pButton icon="pi pi-trash" class="p-button-outlined"></button>
+      <button
+        pButton
+        icon="pi pi-trash"
+        class="p-button-outlined"
+        (click)="onDelete()"
+      ></button>
     </div>
   </div>
 
@@ -39,38 +44,26 @@
     <button
       pButton
       icon="pi pi-{{ iconType | async }}"
-      [disabled]="true"
-    ></button>
-    <button
-      pButton
-      type="button"
-      class="p-button-outlined"
-      label="Save"
+      [disabled]="(iconType | async) == 'none'"
       (click)="onSave()"
-    ></button>
-    <button
-      pButton
-      type="button"
-      class="p-button-outlined"
-      label="Delete"
-      (click)="onDelete()"
     ></button>
   </div>
 
-  <form
-    fxFlex
-    *ngIf="!(formOptions | async)"
-    [formGroup]="reactiveForm"
+  <ngx-monaco-editor
+    style="width: 40vw"
     class="layout-form"
+    *ngIf="!(formOptions | async)"
+    [ngModel]="dynamicFormData | json"
+    (ngModelChange)="dynamicFormDataOutput = parse($event)"
+    [options]="defaultMonacoOptions"
   >
-    <ngx-monaco-editor formControlName="code" [options]="defaultMonacoOptions">
-    </ngx-monaco-editor>
-  </form>
+  </ngx-monaco-editor>
   <sched-form
     class="layout-form"
     *ngIf="formOptions | async as _formOptions"
     [formOptions]="_formOptions"
-    [(value)]="dynamicFormData"
+    [value]="dynamicFormData"
+    (valueChange)="dynamicFormDataOutput = $event"
   >
   </sched-form>
 </div>

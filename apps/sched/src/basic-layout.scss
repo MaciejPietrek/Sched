@@ -17,7 +17,7 @@
 
     grid-template-areas: 'actions form-actions' 'grid form';
     grid-template-rows: auto 1fr;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto;
 
     .layout-actions {
       grid-area: actions;

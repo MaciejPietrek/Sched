@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { Route, RouterModule } from '@angular/router';
 import { MonacoEditorModule, MONACO_PATH } from '@materia-ui/ngx-monaco-editor';
 import { AgGridModule } from 'ag-grid-angular';
@@ -36,9 +36,9 @@ const routes: Route[] = [
     MenuModule,
     MegaMenuModule,
     SchedFormModule,
+    FormsModule,
     BreadcrumbModule,
     MonacoEditorModule,
-    ReactiveFormsModule,
     ProgressElementModule,
     RouterModule.forChild(routes),
   ],

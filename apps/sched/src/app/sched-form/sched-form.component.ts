@@ -14,8 +14,13 @@ import {
   FormControl,
   FormGroup,
 } from '@angular/forms';
-import { BehaviorSubject, map, tap } from 'rxjs';
-import { parseFormObject, parseFormOptions } from './form-definition';
+import { BehaviorSubject, map, Subject, tap } from 'rxjs';
+import {
+  parseFormObject,
+  parseFormOptions,
+  SchedArray,
+  updateStructure,
+} from './form-definition';
 import { FormOptions, GroupOptions } from './form-options';
 
 @Component({
@@ -34,11 +39,25 @@ export class SchedFormComponent implements OnInit {
     this.initFormValueChangeSubsciption();
   }
 
+  private inputValue$ = new Subject<{
+    value: any;
+    emitEvent: boolean;
+    onlySelf: boolean;
+  }>();
+  private valueUpdate = this.inputValue$.pipe(
+    tap((update) =>
+      updateStructure(this.fb, this.formGroup.value as any, update.value)
+    ),
+    tap((update) => {
+      this.formGroup.value.patchValue(update.value, {
+        emitEvent: update.emitEvent,
+        onlySelf: update.onlySelf,
+      });
+    })
+  );
+
   @Input('value') set inputValue(value: Object) {
-    this.formGroup.value?.patchValue(value, {
-      emitEvent: false,
-      onlySelf: true,
-    });
+    this.inputValue$.next({ value, emitEvent: true, onlySelf: true });
   }
   @Output('valueChange') outputValue = new EventEmitter<Object>();
 
@@ -55,18 +74,27 @@ export class SchedFormComponent implements OnInit {
     return control instanceof FormControl;
   };
 
+  public udpateControlSize = (control: AbstractControl) => {};
+
   public onRemove = (control: FormControl, controlIndex: number) => {
-    const formArray = control.parent! as FormArray;
+    const formArray = control.parent! as SchedArray;
     formArray.removeAt(controlIndex);
   };
 
   public onCopy = (control: FormControl, controlIndex: number) => {
-    const formArray = control.parent! as FormArray;
-    const newIndex = Number(controlIndex) + 1;
+    const formArray = control.parent! as SchedArray;
+    const newIndex = controlIndex + 1;
 
-    //@ts-ignore
-    const newControl = parseFormOptions(this.fb, formArray.scaffold);
+    const newControl = parseFormOptions(this.fb, formArray.definition?.items);
     formArray.insert(newIndex, newControl!);
+    this.changeDetector.detectChanges();
+  };
+
+  public onNewElement = (control: SchedArray) => {
+    const formArray = control;
+
+    const newControl = parseFormOptions(this.fb, formArray.definition?.items);
+    formArray.insert(0, newControl!);
     this.changeDetector.detectChanges();
   };
 
@@ -79,6 +107,7 @@ export class SchedFormComponent implements OnInit {
         tap((formGroup) => this.formGroup.next(formGroup!))
       )
       .subscribe();
+    this.valueUpdate.subscribe();
   };
   private initFormValueChangeSubsciption = () => {
     this.formGroup.value.valueChanges

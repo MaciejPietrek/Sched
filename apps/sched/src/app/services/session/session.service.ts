@@ -2,6 +2,22 @@ import { Injectable } from '@angular/core';
 import { Jwt, JwtSession } from './session.interface';
 import { jwtS, sessionInitialitedS, sessionS } from './session.storage';
 
+function parseJwt(token: string) {
+  var base64Url = token.split('.')[1];
+  var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  var jsonPayload = decodeURIComponent(
+    window
+      .atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join('')
+  );
+
+  return JSON.parse(jsonPayload);
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,14 +27,13 @@ export class SessionService {
   public init(jwt: Jwt) {
     try {
       const jwtString = jwt;
-      const dataString = jwtString.split('.')[1];
-      const decoded = atob(dataString);
-      const dataObj = JSON.parse(decoded);
+      const decoded = parseJwt(jwtString);
 
       jwtS.set(jwt);
-      sessionS.set(dataObj);
+      sessionS.set(decoded);
       sessionInitialitedS.set(true);
     } catch (error) {
+      console.error(error);
       console.error(new Error(`Invalid jwt token\n'${jwt}'`));
       return;
     }

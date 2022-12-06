@@ -3,7 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { SignInPageComponent } from './auth-page/sign-in-page/sign-in-page.component';
 import { SignOutPageComponent } from './auth-page/sign-out-page/sign-out-page.component';
 import { SignUpPageComponent } from './auth-page/sign-up-page/sign-up-page.component';
+import { AdminGuard } from './guards/admin.guard';
 import { AnonimGuard } from './guards/anonim.guard';
+import { ErrorPageGuard } from './guards/error-page.guard';
 import { SignInGuard } from './guards/sign-in.guard';
 import { SimpleGuard } from './guards/simple.guard';
 
@@ -26,7 +28,13 @@ const routes: Routes = [
       import('./view-source/view-source.module').then(
         (m) => m.ViewSourceModule
       ),
-    canActivate: [SignInGuard],
+    canActivate: [SignInGuard, AdminGuard],
+  },
+  {
+    path: 'error',
+    loadChildren: () =>
+      import('./error-page/error-page.module').then((m) => m.ErrorPageModule),
+    canActivate: [ErrorPageGuard],
   },
   {
     path: 'signIn',

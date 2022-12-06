@@ -77,7 +77,6 @@ export class SourcePageComponent implements AfterViewInit {
         const _structure = data[1].structure;
         const _formOptions = data[2];
 
-        console.log({ _columnDefs, _structure, _formOptions });
         const _gridOptions = this.mapToGridOptions(_structure, _columnDefs);
         this.gridOptions.next(_gridOptions);
         this.formOptions.next(_formOptions);
@@ -86,6 +85,7 @@ export class SourcePageComponent implements AfterViewInit {
   };
 
   public dynamicFormData: any;
+  public dynamicFormDataOutput: any;
 
   private getViewData = (viewSource: any) =>
     this.requestService.sources
@@ -119,6 +119,7 @@ export class SourcePageComponent implements AfterViewInit {
         const newValue = JSON.stringify(event.node.data, null, '\t');
         this.reactiveCode.setValue(newValue);
         this.selectedRow.next(event.node.data);
+        this.selectedRowID = event.node.data._id;
         this.iconType.next('pencil');
         this.dynamicFormData = event.node.data;
       },
@@ -139,11 +140,15 @@ export class SourcePageComponent implements AfterViewInit {
     return gridOptions;
   };
 
+  private selectedRowID!: string;
+
   public data = new BehaviorSubject<any[]>([]);
   public selectedRow = new BehaviorSubject<{ _id: string } | undefined>(
     undefined
   );
-  public iconType = new BehaviorSubject<'plus' | 'copy' | 'pencil'>('plus');
+  public iconType = new BehaviorSubject<'plus' | 'copy' | 'pencil' | 'none'>(
+    'none'
+  );
 
   public editedRow?: Record<any, any> = undefined;
 
@@ -193,12 +198,23 @@ export class SourcePageComponent implements AfterViewInit {
 
   private updateGridData = (data: any[]) => this.data.next(data);
 
+  private getFormDate = () => this.dynamicFormDataOutput;
+
+  private prevValue: any;
+  public parse = (val: any) => {
+    try {
+      this.prevValue = JSON.parse(val);
+    } catch (error) {
+    } finally {
+      return this.prevValue;
+    }
+  };
+
   public onSave = () => {
     switch (this.iconType.value) {
       case 'plus':
       case 'copy': {
-        const newValue = this.reactiveCode.value;
-        const asJson = JSON.parse(newValue);
+        const asJson = this.getFormDate();
         delete asJson._id;
         this.requestService.sources
           .createNewRecord({ source: this.source, update: asJson })
@@ -212,13 +228,12 @@ export class SourcePageComponent implements AfterViewInit {
         break;
       }
       case 'pencil': {
-        const newValue = this.reactiveCode.value;
-        const asJson = JSON.parse(newValue);
+        const asJson = this.getFormDate();
         delete asJson._id;
         this.requestService.sources
           .findAndUpdate({
             source: this.source,
-            ID: this.selectedRow.value!._id,
+            ID: this.selectedRowID,
             update: asJson,
           })
           .pipe(tap(this.refreshAll))
@@ -242,7 +257,7 @@ export class SourcePageComponent implements AfterViewInit {
   ];
 
   public gridOptions = new Subject<GridOptions>();
-  public formOptions = new Subject<FormOptions>();
+  public formOptions = new BehaviorSubject<FormOptions | null>(null);
 
   public reactiveForm = this.fb.group({
     code: [''],
